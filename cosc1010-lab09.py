@@ -25,10 +25,9 @@
 # - Assign the parameter for sauce to the attribute.
 # - Create the toppings attribute, starting off as a list only holding cheese.
 class Pizza:
-    def __init__(self, size, sauce):
+    def __init__(self, size, sauce = "Red"):
         self.size = size
-        if self.sauce == "":
-            self.sauce = red
+        self.sauce = sauce if sauce else "red"
         else:
             self.sauce = sauce
         self.Toppings = ["cheese"]
@@ -67,6 +66,7 @@ class Pizzeria():
     def __init__(self):
         self.orders = 0
         self.price_per_inch = 0.3
+        self.price_per_topping=0.6
 # - placeOrder():
 #   - This method will allow a customer to order a pizza.
 #     - Which will increment the number of orders.
@@ -141,8 +141,8 @@ while True:
     continue
 # - Repeat the loop as needed.
 # - AFTER the loop, print how many orders were placed.
-print(orders)
 
+myPizzeria.getNumberOfOrders()
 # Example output:
 """
 Would you like to place an order? exit to exit
