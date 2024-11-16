@@ -25,11 +25,12 @@
 # - Assign the parameter for sauce to the attribute.
 # - Create the toppings attribute, starting off as a list only holding cheese.
 class Pizza:
-    def __init__(self, size, sauce = "Red"):
+    def __init__(self, size, sauce):
         self.size = size
-        self.sauce = sauce if sauce else "red"
-        else:
+        if sauce != "":
             self.sauce = sauce
+        else:
+            self.sauce = "Red Sauce"
         self.Toppings = ["cheese"]
 # You need to create one method that corresponds with each of the above attributes
 # which returns the corresponding attribute, just the value.
@@ -109,16 +110,16 @@ class Pizzeria():
 #   - The price for the toppings.
 #   - The total price.
     def getReceipt(self):
-        return f"You ordered a {Pizza.size} inch pizza with garlic sauce and the following toppings:"
+        return f"You ordered a {Pizza.getSize} inch pizza with garlic sauce and the following toppings:"
         for i in (0, len(Toppings)):
-            print(Toppings[i])
+            return(Toppings[i])
         #1 price for the size: You ordered a 20" pizza for 12.0
-        print(f"You ordered a {size}inch pizza for {pizza.getSize()* price_per_inch} ")
+        return (f"You ordered a {Pizza.getSize}inch pizza for {pizza.getSize()* price_per_inch} ")
         #2 price for the toppings: You had 3 topping(s) for $0.8999999999999999
-        print(f"You had {len(Toppings)} topping(s) for {len(Toppings) * price_per_topping}")
+        return (f"You had {len(Toppings)} topping(s) for {len(Toppings) * price_per_topping}")
         #3 total price(call self.getPrice()) below: Your total price is $12.9
         receipt += f"Your total price is ${self.getPrice()}"
-        print(receipt)
+        return (receipt)
 # - getNumberOfOrders()
 #   - This will simply return the number of orders.
     def getNumberOfOrders(self):
