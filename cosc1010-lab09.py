@@ -3,7 +3,7 @@
 # Submission Date 11/18/24
 # Lab 09
 # Lab Section:15
-# Sources, people worked with, help given to:
+# Sources, people worked with, help given to: chat GPT to fix and finallize small errors
 # Your
 # Comments
 # Here
@@ -25,35 +25,27 @@
 # - Assign the parameter for sauce to the attribute.
 # - Create the toppings attribute, starting off as a list only holding cheese.
 class Pizza:
-    def __init__(self, size, sauce):
-        self.size = size
-        if sauce != "":
-            self.sauce = sauce
-        else:
-            self.sauce = "Red Sauce"
-        self.Toppings = ["cheese"]
+    def __init__(self, size, sauce = "Red"):
+        self.size = int(size) if size.isdigit() and int(size) > 10 else 10
+        self.sauce = sauce if sauce.strip() else "Red"
+        self.toppings = ["cheese"]
 # You need to create one method that corresponds with each of the above attributes
 # which returns the corresponding attribute, just the value.
 # For the size and toppings attributes, you will need to have a method to set them.
 # - For Size, ensure it is an int > 10 (inches)
 #   - If it is not, default to a 10" pizza (you can store ten). These checks should occur in init as well.
-    def set_size(size):
-        if int(size).isdigit() and int(size) > 10:
-            slef.size = int(size)
-        else:
-            self.size = 10
 # - For toppings, you will need to add the toppings.
 #   - This method needs to be able to handle multiple values.
 #   - Append all elements to the list.
 # Create a method that returns the amount of toppings.
-    def set_toppings(self, toppings):
-        self.Toppings.append(toppings)
+    def add_toppings_to_list(self, *toppings):
+        self.toppings.extend(toppings)
     def getSize(self):
         return self.size
     def get_sauce(self):
         return self.sauce
-    def getAmountOfToppings(self):
-        return self.Toppings
+    def get_toppings(self):
+        return self.toppings
 # You will be creating a Pizzeria class with the following attributes:
 # - orders, the number of orders placed. Should start at 0.
 # - price_per_topping, a static value for the price per topping of 0.30.
@@ -64,10 +56,11 @@ class Pizza:
 #   - This one does not need to take in any extra parameters.
 #   - It should create and set the attributes defined above.
 class Pizzeria():
+    price_per_inch = 0.6
+    price_per_topping=0.3
     def __init__(self):
         self.orders = 0
-        self.price_per_inch = 0.3
-        self.price_per_topping=0.6
+        self.pizzas = []
 # - placeOrder():
 #   - This method will allow a customer to order a pizza.
 #     - Which will increment the number of orders.
@@ -83,43 +76,49 @@ class Pizzeria():
     def placeOrder(self):
         self.orders += 1
         print("Please enter the size of pizza, as a whole number. The smallest size is 10")
-        self.size = input("")
+        self.size = input("").strip()
         # Get the sauce, and toppings
         print("What kind of sauce would you like?")
         print("Leave blank for red sauce")
-        self.sauce = input("")
-        print("Please enter the toppings you would like, leave blank when done")
-        Toppings = []
+        self.sauce = input("").strip()
+        print("Please enter the toppings you would like (one at a time), enter blank when done")
+        toppings = []
         while True:
-            topping = input()
-            if (topping ==""):
+            topping = input("").strip()
+            if not topping:
                 break
-            else:
-                Toppings.append(topping)
+            toppings.append(topping)
+        pizza = Pizza(self.size, self.sauce)
+        pizza.add_toppings_to_list(*toppings)
+        self.pizzas.append(pizza)
+
 # - getPrice()
 #   - You will need to determine the price of the pizza.
 #   - This will be (pizza.getSize() * price_per_inch) + pizza.getAmountOfToppings() * price_per_topping.
 #   - You will have to retrieve the pizza from the pizza list.
-    def getPrice(self):
-        amount = (pizza.getSize() * price_per_inch) + len(Toppings) * price_per_topping
-        return amount
+    def getPrice(self, pizza):
+        size_cost = pizza.getSize() * Pizzeria.price_per_inch
+        toppings_cost = len(pizza.get_toppings()) * Pizzeria.price_per_topping
+        return size_cost + toppings_cost
 # - getReceipt()
 #   - Creates a receipt of the current pizza.
 #   - Show the sauce, size, and toppings.
 #   - Show the price for the size.
 #   - The price for the toppings.
 #   - The total price.
-    def getReceipt(self):
-        return f"You ordered a {Pizza.getSize} inch pizza with garlic sauce and the following toppings:"
-        for i in (0, len(Toppings)):
-            return(Toppings[i])
+    def getReceipt(self, pizza):
+        size_cost = pizza.getSize() * Pizzeria.price_per_inch
+        toppings_cost = len(pizza.get_toppings()) * Pizzeria.price_per_topping
+        total_cost = self.getPrice(pizza)
+        print(f"You ordered a {pizza.getSize()} inch pizza with {pizza.get_sauce()} sauce and the following toppings:")
+        print(", ".join(pizza.get_toppings()))
         #1 price for the size: You ordered a 20" pizza for 12.0
-        return (f"You ordered a {Pizza.getSize}inch pizza for {pizza.getSize()* price_per_inch} ")
+        print(f"You ordered a {pizza.getSize()} inch pizza for ${size_cost}")
         #2 price for the toppings: You had 3 topping(s) for $0.8999999999999999
-        return (f"You had {len(Toppings)} topping(s) for {len(Toppings) * price_per_topping}")
+        print(f"You had {len(pizza.get_toppings())} topping(s) for ${toppings_cost}")
         #3 total price(call self.getPrice()) below: Your total price is $12.9
-        receipt += f"Your total price is ${self.getPrice()}"
-        return (receipt)
+        print (f"Your total price is ${total_cost}")
+        print("")
 # - getNumberOfOrders()
 #   - This will simply return the number of orders.
     def getNumberOfOrders(self):
@@ -137,13 +136,11 @@ while True:
 # - Call the placeOrder() method with your class instance.
     myPizzeria.placeOrder()
 # - After the order is placed, call the getReceipt() method.
-    myPizzeria.getReceipt()
-    print("Would you like to place an order? exit to exit")
-    continue
+    myPizzeria.getReceipt(myPizzeria.pizzas[-1])
 # - Repeat the loop as needed.
 # - AFTER the loop, print how many orders were placed.
 
-myPizzeria.getNumberOfOrders()
+print(f"{myPizzeria.getNumberOfOrders()} amount of orders were placed")
 # Example output:
 """
 Would you like to place an order? exit to exit
